@@ -41,11 +41,14 @@ jobs:
       - image: docker:17.09.0-ce-git
     environment:
       AAA: latest
-      BASH_ENV: ~/.bashrc
     steps:
       - checkout
       - setup_remote_docker
-      - run: echo 'export TAG="$AAA"' >> $BASH_ENV
+      - run:
+          name: Set Docker tag
+          command: |
+            echo 'export TAG="$AAA"' >> $BASH_ENV
+            source $BASH_ENV
       - *docker-build
 
   push-ci-image-latest:
@@ -64,8 +67,6 @@ jobs:
     working_directory: /app
     docker:
       - image: docker:17.09.0-ce-git
-    environment:
-      BASH_ENV: ~/.bashrc
     steps:
       - checkout
       - setup_remote_docker
