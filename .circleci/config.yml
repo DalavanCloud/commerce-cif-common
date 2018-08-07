@@ -1,6 +1,6 @@
 docker-build: &docker-build
   run:
-    name: Build Docker image (Tag)
+    name: Build Docker image
     command: |
       docker build -t adobe/commerce-cif-ci-env:$TAG ./ci/environment
 
@@ -40,21 +40,21 @@ jobs:
     docker:
       - image: docker:17.09.0-ce-git
     environment:
-       TAG: latest
+      AAA: latest
     steps:
       - checkout
       - setup_remote_docker
+      - run: echo 'export TAG="$AAA"' >> $BASH_ENV
       - *docker-build
 
   push-ci-image-latest:
     working_directory: /app
     docker:
       - image: docker:17.09.0-ce-git
-    environment:
-       TAG: latest
     steps:
       - checkout
       - setup_remote_docker
+      - run: echo 'export TAG="latest"' >> $BASH_ENV
       - *docker-build
       - *docker-push
 
@@ -62,11 +62,10 @@ jobs:
     working_directory: /app
     docker:
       - image: docker:17.09.0-ce-git
-    environment:
-       TAG: $CIRCLE_TAG
     steps:
       - checkout
       - setup_remote_docker
+      - run: echo 'export TAG="$CIRCLE_TAG"' >> $BASH_ENV
       - *docker-build
       - *docker-push
 
