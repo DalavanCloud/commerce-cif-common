@@ -2,14 +2,14 @@ docker-build: &docker-build
   run:
     name: Build Docker image
     command: |
-      docker build -t adobe/commerce-cif-ci-env:${$TAG:-$CIRCLE_TAG} ./ci/environment
+      docker build -t adobe/commerce-cif-ci-env:${TAG:-$CIRCLE_TAG} ./ci/environment
 
 docker-push: &docker-push
   run:
     name: Push image to Docker Hub
     command: |
       docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      docker push adobe/commerce-cif-ci-env:${$TAG:-$CIRCLE_TAG}
+      docker push adobe/commerce-cif-ci-env:${TAG:-$CIRCLE_TAG}
 
 version: 2
 jobs:
